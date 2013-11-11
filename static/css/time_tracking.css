@@ -1,0 +1,9 @@
+div.time_tracking div.time_worked {
+    clear: both;
+    text-align: right;
+    margin-right: 20px;
+}
+
+div.time_tracking h2 {
+    margin-top: 30px;
+}

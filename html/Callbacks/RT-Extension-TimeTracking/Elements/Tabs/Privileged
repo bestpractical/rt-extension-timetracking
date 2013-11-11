@@ -1,0 +1,9 @@
+<%init>
+Menu()->child('tools')->child(
+    'my_week',
+    title       => loc("My Week"),
+    description => loc("Tickets you worked on this week"),
+    path        => '/Tools/MyWeek.html',
+    sort_order  => 2.5,
+);
+</%init>

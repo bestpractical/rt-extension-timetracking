@@ -1,0 +1,8 @@
+@CustomFields = (
+    {
+        Name => 'Worked Date',
+        Type => 'Date',
+        LookupType => 'RT::Queue-RT::Ticket-RT::Transaction',
+        MaxValues => 1,
+    },
+);

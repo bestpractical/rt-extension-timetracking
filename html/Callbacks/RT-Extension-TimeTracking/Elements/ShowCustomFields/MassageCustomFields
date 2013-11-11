@@ -1,0 +1,10 @@
+<%INIT>
+return unless $Object->isa('RT::Transaction');
+return if $Object->FirstCustomFieldValue('Worked Date');
+$CustomFields->Limit( FIELD => 'Name', VALUE => 'Worked Date', OPERATOR => '!=', CASESENSITIVE => 0 );
+</%INIT>
+
+<%ARGS>
+$Object
+$CustomFields
+</%ARGS>
