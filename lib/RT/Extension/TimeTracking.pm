@@ -35,6 +35,10 @@ in your database.
 If you are upgrading this module, check for upgrading instructions
 in case changes need to be made to your database.
 
+=item patch RT
+
+    patch -p1 -d /path/to/rt < etc/0001-handle-txn-cfs-on-ticket-creation-and-updates-with-U.patch
+
 =item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
 
 Add this line:

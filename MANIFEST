@@ -1,3 +1,4 @@
+etc/0001-handle-txn-cfs-on-ticket-creation-and-updates-with-U.patch
 etc/initialdata
 html/Callbacks/RT-Extension-TimeTracking/Elements/ShowCustomFields/MassageCustomFields
 html/Callbacks/RT-Extension-TimeTracking/Elements/Tabs/Privileged
