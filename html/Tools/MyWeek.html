@@ -196,8 +196,50 @@ $txns->Limit(
 my $total_time_worked = 0;
 while ( my $txn = $txns->Next ) {
     my $ticket = $txn->Object;
-    my $worked_date = $txn->FirstCustomFieldValue('Worked Date') || $txn->CreatedObj->ISO( Time => 0, Timezone => 'user' );
-    
+    next if $txn->FirstCustomFieldValue('Worked Date'); # we handle this in the next part
+    my $worked_date = $txn->CreatedObj->ISO( Time => 0, Timezone => 'user' );
+    next unless $week_worked{$worked_date};
+    $week_worked{$worked_date}{tickets}{$ticket->id} ||= {
+        ticket => $ticket,
+    };
+    $week_worked{$worked_date}{tickets}{$ticket->id}{time_worked} += $txn->TimeTaken;
+    $week_worked{$worked_date}{time_worked} += $txn->TimeTaken;
+    $total_time_worked += $txn->TimeTaken;
+}
+
+$txns = RT::Transactions->new($user);
+$txns->Limit(
+    FIELD    => 'ObjectType',
+    VALUE    => 'RT::Ticket',
+);
+
+$txns->Limit(
+    FIELD    => 'Creator',
+    VALUE    => $user->id,
+);
+
+$txns->Limit(
+    FIELD    => 'TimeTaken',
+    VALUE    => 0,
+    OPERATOR => '!=',
+);
+
+my $cf = RT::CustomField->new($user);
+$cf->Load('Worked Date');
+my $cf_alias = $txns->Join(
+        ALIAS1 => 'main',
+        FIELD1 => 'id',
+        TABLE2 => 'ObjectCustomFieldValues',
+        FIELD2 => 'ObjectId'
+);
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'CustomField', VALUE => $cf->id );
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'ObjectType', VALUE => 'RT::Transaction' );
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_start->ISO, OPERATOR => '>=' );
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_end->ISO, OPERATOR => '<', ENTRYAGGREGATOR => 'AND', );
+
+while ( my $txn = $txns->Next ) {
+    my $ticket = $txn->Object;
+    my $worked_date = $txn->FirstCustomFieldValue('Worked Date');
     next unless $week_worked{$worked_date};
     $week_worked{$worked_date}{tickets}{$ticket->id} ||= {
         ticket => $ticket,
