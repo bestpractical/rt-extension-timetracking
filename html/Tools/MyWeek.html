@@ -33,6 +33,7 @@
 <th class="collection-as-table"><&|/l&>Status</&></th>
 <th class="collection-as-table"><&|/l&>Owner</&></th>
 <th class="collection-as-table"><&|/l&>Time Worked</&></th>
+<th class="collection-as-table"><&|/l&>Add</&></th>
 </tr>
 % my $i = 1;
 % for my $ticket_id ( sort { $a <=> $b } keys %{$week_worked{$day}{tickets}} ) {
@@ -48,6 +49,19 @@
 <td class="collection-as-table"><% $ticket->Status %></td>
 <td class="collection-as-table"><% $ticket->OwnerObj->Name %></td>
 <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $entry->{time_worked} &></td>
+<td class="collection-as-table">
+<form method="POST">
+    <input type="hidden" value="<% $day %>" name="Object-RT::Transaction--CustomField-<% $date_cf->id %>-Values" />
+    <input name="id" type="hidden" value=<% $ticket->id %> />
+    <& /Elements/EditTimeValue,
+        Name    => "UpdateTimeWorked",
+        Default => '',
+        InUnits => $DefaultTimeUnits || 'minutes',
+    &>
+    <input type="submit" class="button" value="<% loc('Save') %>">
+</form>
+
+</td>
 </tr>
 % }
 </table>
