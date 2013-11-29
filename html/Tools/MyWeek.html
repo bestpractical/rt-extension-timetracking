@@ -53,13 +53,13 @@
 </table>
 
 <div class="time_worked">
-<span class="label"><&|/l&>Time Worked</&>:</span> <span class="value"><& /Ticket/Elements/ShowTime, minutes => $week_worked{$day}{time_worked} &></span>
+<span class="label"><&|/l&><% $week_worked{$day}{week_name} %> Total</&>:</span> <span class="value"><& /Ticket/Elements/ShowTime, minutes => $week_worked{$day}{time_worked} &></span>
 </div>
 % }
 
 <form method="POST">
     <input type="hidden" value="<% $day %>" name="Object-RT::Transaction--CustomField-<% $date_cf->id %>-Values" />
-    <&|/l&>Add ticket</&>: <input name="id" type="text" size="8" />
+    <&|/l&>Add ticket</&>: <input name="id" type="text" size="8" data-autocomplete="Tickets" />
     <&|/l&>Time Worked</&>:
     <& /Elements/EditTimeValue,
         Name    => "UpdateTimeWorked",
@@ -143,12 +143,14 @@ $week_end->Set( Value => $date->Unix );
 $week_end->AddDays( 8 - $wday );
 
 my %week_worked;
+my @week_name = qw/Monday Tuesday Wednesday Thursday Friday Saturday Sunday/;
 for my $offset ( 0 .. 6 ) {
     my $date = RT::Date->new($user);
     $date->Set( Value => $week_start->Unix );
     $date->AddDays( $offset ) if $offset;
     $week_worked{$date->ISO(Time => 0, Timezone => 'user')} = {
         date => $date,
+        week_name => $week_name[$offset],
         tickets => {},
     };
 }
