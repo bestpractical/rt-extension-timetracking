@@ -19,7 +19,7 @@ $date_cf->LoadByName( Name => 'Worked Date', LookupType => 'RT::Queue-RT::Ticket
           Default => $ARGS{UpdateTimeWorked} || '',
           InUnits => $ARGS{'UpdateTimeWorked-TimeUnits'} || 'minutes',
       &>
-      <input type="submit" value="<% loc('Add time') %>">
+      <input type="submit" value="<% loc('Add') %>">
     </form>
   </td>
 </tr>
