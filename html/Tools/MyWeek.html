@@ -10,16 +10,20 @@
 % if ( $DefaultTimeUnits ) {
 <input type="hidden" value="<% $DefaultTimeUnits %>" name="DefaultTimeUnits" />
 % }
-
+<table>
 % if ( $session{CurrentUser}->HasRight( Object => $RT::System, Right => 'AdminTimesheets' )) {
 <div>
+<tr><td class="label">
 <input type="hidden" name="User" value="<% $User || '' %>" />
-<&|/l&>Go to user</&>
-<input type="text" name="UserString" value="" data-autocomplete="Users" data-autocomplete-return="Name" id="autocomplete-User" />
+<&|/l&>Go to user</&>:</td>
+<td><input type="text" name="UserString" value="" data-autocomplete="Users" data-autocomplete-return="Name" id="autocomplete-User" /></td>
+</tr>
 </div>
 % }
-
-<&|/l&>Week of(pick any day in week)</&>: <& /Elements/SelectDate, ShowTime => 0, Name => 'Date', Default => $date->Date(Format=>'ISO') &>
+<tr><td class="label">
+<&|/l&>Week of (pick any day in week)</&>:</td>
+<td><& /Elements/SelectDate, ShowTime => 0, Name => 'Date', Default => $date->Date(Format=>'ISO') &></td></tr>
+</table>
 </form>
 
 % for my $day ( sort keys %week_worked ) {
