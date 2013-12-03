@@ -292,6 +292,9 @@ for my $day ( keys %week_worked ) {
     $activity_txns->Limit( FIELD => 'ObjectType', VALUE => 'RT::Ticket' );
     $activity_txns->Limit( FIELD => 'Created', OPERATOR => '>=', VALUE => $start_date->ISO );
     $activity_txns->Limit( FIELD => 'Created', OPERATOR => '<',  VALUE => $end_date->ISO, ENTRYAGGREGATOR => 'AND' );
+    $activity_txns->Limit( FIELD => 'Type', VALUE => 'Create' );
+    $activity_txns->Limit( FIELD => 'Type', VALUE => 'Correspond' );
+    $activity_txns->Limit( FIELD => 'Type', VALUE => 'Comment' );
     $activity_txns->GroupByCols( { FIELD => 'ObjectId' } );
     my @ticket_ids;
     while ( my $transaction = $activity_txns->Next ) {
