@@ -5,4 +5,10 @@
         LookupType => 'RT::Queue-RT::Ticket-RT::Transaction',
         MaxValues => 1,
     },
+    {
+        Name => 'Actor',
+        Type => 'FreeformSingle',
+        LookupType => 'RT::Queue-RT::Ticket-RT::Transaction',
+        MaxValues => 1,
+    },
 );

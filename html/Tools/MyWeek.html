@@ -56,6 +56,9 @@
 <td class="collection-as-table">
 <form method="POST">
     <input type="hidden" value="<% $day %>" name="Object-RT::Transaction--CustomField-<% $date_cf->id %>-Values" />
+% if ( $user->id != $session{CurrentUser}->id ) {
+    <input type="hidden" value="<% $session{CurrentUser}->id %>" name="Object-RT::Transaction--CustomField-<% $actor_cf->id %>-Values" />
+% }
     <input name="id" type="hidden" value=<% $ticket->id %> />
     <& /Elements/EditTimeValue,
         Name    => "UpdateTimeWorked",
@@ -77,6 +80,9 @@
 
 <form method="POST">
     <input type="hidden" value="<% $day %>" name="Object-RT::Transaction--CustomField-<% $date_cf->id %>-Values" />
+% if ( $user->id != $session{CurrentUser}->id ) {
+    <input type="hidden" value="<% $session{CurrentUser}->id %>" name="Object-RT::Transaction--CustomField-<% $actor_cf->id %>-Values" />
+% }
     <&|/l&>Add ticket</&>: <input name="id" type="text" size="8" data-autocomplete="Tickets" />
     <&|/l&>Time Worked</&>:
     <& /Elements/EditTimeValue,
@@ -131,6 +137,8 @@ MaybeRedirectForResults(
 my $date_cf = RT::CustomField->new($user);
 $date_cf->LoadByName( Name => 'Worked Date', LookupType => 'RT::Queue-RT::Ticket-RT::Transaction');
 
+my $actor_cf = RT::CustomField->new($user);
+$actor_cf->LoadByName( Name => 'Actor', LookupType => 'RT::Queue-RT::Ticket-RT::Transaction');
 
 if ( defined $ARGS{'UpdateTimeWorked'} ) {
     RT::Interface::Web::PreprocessTimeUpdates(\%ARGS);
