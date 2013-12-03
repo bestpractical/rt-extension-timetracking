@@ -22,7 +22,7 @@
 % }
 <tr><td class="label">
 <&|/l&>Week of (pick any day in week)</&>:</td>
-<td><& /Elements/SelectDate, ShowTime => 0, Name => 'Date', Default => $date->Date(Format=>'ISO') &></td></tr>
+<td><& /Elements/SelectDate, ShowTime => 0, Name => 'Date', Default => $date->Date(Format=>'ISO', Timezone => 'user') &></td></tr>
 </table>
 </form>
 
@@ -168,7 +168,7 @@ if ($Date) {
 }
 $date->SetToMidnight( Timezone => 'user' );
 
-my $wday = ($date->Localtime())[6] || 7;
+my $wday = ($date->Localtime('user'))[6] || 7;
 my $week_start = RT::Date->new($user);
 $week_start->Set( Value => $date->Unix );
 $week_start->AddDays( -1 * $wday + 1 ) unless $wday == 1;
