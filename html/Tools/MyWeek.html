@@ -93,21 +93,21 @@
     <input type="submit" class="button" value="<% loc('Save') %>">
 </form>
 
+<&| /Widgets/TitleBox, title => loc('Activities') &>
+<& /Elements/CollectionList,
+    OrderBy => 'id',
+    Order => 'ASC',
+    Format => $activity_format,
+    Collection => $week_worked{$day}{activity_tickets},
+&>
+</&>
+
 % }
 
 <hr />
 <div class="time_worked">
 <span class="label"><&|/l&>Total Time Worked</&>:</span> <span class="value"><& /Ticket/Elements/ShowTime, minutes => $total_time_worked &></span>
 </div>
-
-<&| /Widgets/TitleBox, title => loc('Activities') &>
-<& /Elements/CollectionList,
-    OrderBy => 'id',
-    Order => 'ASC',
-    Format => $activity_format,
-    Collection => $activity_tickets,
-&>
-</&>
 
 </div>
 <%INIT>
@@ -275,24 +275,33 @@ while ( my $txn = $txns->Next ) {
     $total_time_worked += $txn->TimeTaken;
 }
 
-my $activity_txns = RT::Transactions->new($user);
-$txns->Limit( FIELD => 'Creator', VALUE => $user->id );
-$activity_txns->Limit( FIELD => 'ObjectType', VALUE => 'RT::Ticket' );
-$activity_txns->Limit( FIELD => 'Created', OPERATOR => '>=', VALUE => $week_start->ISO );
-$activity_txns->Limit( FIELD => 'Created', OPERATOR => '<',  VALUE => $week_end->ISO, ENTRYAGGREGATOR => 'AND' );
-$activity_txns->GroupByCols( { FIELD => 'ObjectId' } );
-
-my @ticket_ids;
-while ( my $transaction = $activity_txns->Next ) {
-    push @ticket_ids, $transaction->ObjectId;
-}
-my $activity_tickets = RT::Tickets->new( $user );
-$activity_tickets->FromSQL( join ' OR ', map { "id = $_" } @ticket_ids );
-
 my $activity_format =
     q{'<a href="__WebPath__/Ticket/Display.html?id=__id__">__id__</a>/TITLE:id/ALIGN:Left'}.
     q{,'<a href="__WebPath__/Ticket/Display.html?id=__id__">__Subject__</a>/TITLE:Subject'}.
     q{,__QueueName__,__OwnerName__,__LastUpdatedBy__,__DueRelative__,__LastUpdatedRelative__};
+
+for my $day ( keys %week_worked ) {
+    my $start_date = $week_worked{$day}{date};
+    my $end_date = RT::Date->new($user);
+    $end_date->Set( Value => $start_date->Unix );
+    $end_date->AddDays(1);
+
+    my $activity_txns = RT::Transactions->new($user);
+
+    $txns->Limit( FIELD => 'Creator', VALUE => $user->id );
+    $activity_txns->Limit( FIELD => 'ObjectType', VALUE => 'RT::Ticket' );
+    $activity_txns->Limit( FIELD => 'Created', OPERATOR => '>=', VALUE => $start_date->ISO );
+    $activity_txns->Limit( FIELD => 'Created', OPERATOR => '<',  VALUE => $end_date->ISO, ENTRYAGGREGATOR => 'AND' );
+    $activity_txns->GroupByCols( { FIELD => 'ObjectId' } );
+    my @ticket_ids;
+    while ( my $transaction = $activity_txns->Next ) {
+        push @ticket_ids, $transaction->ObjectId;
+    }
+    my $activity_tickets = RT::Tickets->new( $user );
+    $activity_tickets->FromSQL( join ' OR ', map { "id = $_" } @ticket_ids );
+    $week_worked{$day}{activity_tickets} = $activity_tickets;
+}
+
 </%INIT>
 
 <%ARGS>
