@@ -1,8 +1,10 @@
 etc/0001-handle-txn-cfs-on-ticket-creation-and-updates-with-U.patch
 etc/initialdata
 html/Callbacks/RT-Extension-TimeTracking/Elements/ShowCustomFields/MassageCustomFields
+html/Callbacks/RT-Extension-TimeTracking/Elements/ShowCustomFields/ShowComponentName
 html/Callbacks/RT-Extension-TimeTracking/Elements/Tabs/Privileged
 html/Callbacks/RT-Extension-TimeTracking/Ticket/Elements/ShowBasics/EndOfList
+html/Elements/ShowCustomFieldActor
 html/Tools/MyWeek.html
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
