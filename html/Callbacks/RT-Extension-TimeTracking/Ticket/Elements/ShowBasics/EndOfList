@@ -1,4 +1,20 @@
 <%init>
+
+my $time_worked;
+if ( $TicketObj->TimeWorked ) {
+    $time_worked = {};
+    my $transactions = $TicketObj->Transactions;
+    $transactions->Limit(
+        FIELD           => 'TimeTaken',
+        VALUE           => 0,
+        OPERATOR        => '>',
+    );
+
+    while ( my $txn = $transactions->Next ) {
+        $time_worked->{ $txn->CreatorObj->Name } += $txn->TimeTaken;
+    }
+}
+
 # The self service interface doesn't support updating time fields.
 return unless $session{CurrentUser}->Privileged
           and $session{CurrentUser}->HasRight( Object => $TicketObj, Right => "ModifyTicket" );
@@ -40,6 +56,23 @@ input#<% $cf_style %> {
     </form>
   </td>
 </tr>
+
+% if ( $TicketObj->TimeWorked ) {
+<tr class="time worked">
+    <td class="label"><&|/l&>Worked</&>:</td>
+    <td>
+    <table>
+% for my $user ( keys %$time_worked ) {
+    <tr>
+% # add "value" class for $user label is to make the font the same size as value
+    <td class="value"><% $user %>:</td>
+    <td class="value"><& /Ticket/Elements/ShowTime, minutes => $time_worked->{$user} &></td>
+    </tr>
+% }
+    </table>
+    </td>
+</tr>
+% }
 
 <%args>
 $TicketObj
