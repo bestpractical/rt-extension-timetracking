@@ -7,7 +7,7 @@ if ( $TicketObj->TimeWorked ) {
     $transactions->Limit(
         FIELD           => 'TimeTaken',
         VALUE           => 0,
-        OPERATOR        => '>',
+        OPERATOR        => '!=',
     );
 
     while ( my $txn = $transactions->Next ) {
