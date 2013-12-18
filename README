@@ -26,6 +26,11 @@ INSTALLATION
 
         or add "RT::Extension::TimeTracking" to your existing @Plugins line.
 
+        The default week start day in MyWeek page is Monday, you can change
+        it by setting $TimeTrackingFirstDayOfWeek, e.g.
+
+            Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
+
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
 
