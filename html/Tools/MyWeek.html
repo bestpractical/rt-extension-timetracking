@@ -100,6 +100,8 @@
 <span class="label"><&|/l&>Total Time Worked</&>:</span> <span class="value"><& /Ticket/Elements/ShowTime, minutes => $total_time_worked &></span>
 </div>
 
+% $m->callback( CallbackName => 'End', User => $user, Date => $date );
+
 </div>
 <%INIT>
 my $user;
