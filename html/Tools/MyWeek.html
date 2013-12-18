@@ -301,7 +301,7 @@ while ( my $txn = $txns->Next ) {
 
 my $activity_txns = RT::Transactions->new($user);
 
-$txns->Limit( FIELD => 'Creator', VALUE => $user->id );
+$activity_txns->Limit( FIELD => 'Creator', VALUE => $user->id );
 $activity_txns->Limit( FIELD => 'ObjectType', VALUE => 'RT::Ticket' );
 $activity_txns->Limit( FIELD => 'Created', OPERATOR => '>=', VALUE => $week_start->ISO );
 $activity_txns->Limit( FIELD => 'Created', OPERATOR => '<',  VALUE => $week_end->ISO, ENTRYAGGREGATOR => 'AND' );
