@@ -36,6 +36,15 @@ INSTALLATION
 
     Restart your webserver
 
+METHODS
+  WeekStartDate
+    Accepts an RT::User object, an RT::Date object and a day of the week
+    (Monday, Tuesday, etc.) and calculates the start date for the week the
+    date object is in using the passed day as the first day of the week. The
+    default first day of the week is Monday.
+
+    Returns an RT::Date object set to the calculated date.
+
 AUTHOR
     sunnavy <sunnavy@bestpractical.com>
 

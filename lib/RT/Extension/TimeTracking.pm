@@ -9,6 +9,27 @@ RT->AddJavaScript("time_tracking.js");
 
 RT::System->AddRight( Admin => AdminTimesheets  => 'Add time worked for other users' );
 
+# RT::Date does weedkay abbreviations, but not full weekday names.
+our @DAYS_OF_WEEK = (
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+);
+
+our %WEEK_INDEX = (
+    Sunday    => 0,
+    Monday    => 1,
+    Tuesday   => 2,
+    Wednesday => 3,
+    Thursday  => 4,
+    Friday    => 5,
+    Saturday  => 6,
+);
+
 =head1 NAME
 
 RT-Extension-TimeTracking - Time Tracking Extension
@@ -59,6 +80,50 @@ setting C<$TimeTrackingFirstDayOfWeek>, e.g.
 =item Restart your webserver
 
 =back
+
+=head1 METHODS
+
+=head2 WeekStartDate
+
+Accepts an RT::User object, an RT::Date object and a day of the week (Monday,
+Tuesday, etc.) and calculates the start date for the week the date object is
+in using the passed day as the first day of the week. The default
+first day of the week is Monday.
+
+Returns an RT::Date object set to the calculated date.
+
+=cut
+
+sub WeekStartDate {
+    my $user = shift;
+    my $date = shift;
+    my $first_day = shift;
+
+    $first_day //= 'Monday';
+    $first_day = ucfirst lc $first_day;
+
+    unless ( $first_day and exists $WEEK_INDEX{$first_day} ){
+        RT->Logger->warning("Invalid TimeTrackingFirstDayOfWeek value: "
+             . "$first_day. It should be one of Monday, Tuesday, etc.");
+        return (0, "Invalid day of week set for TimeTrackingFirstDayOfWeek");
+    }
+
+    my $day = ($date->Localtime('user'))[6];
+    my $week_start = RT::Date->new($user);
+
+    if ( $day == $WEEK_INDEX{$first_day} ){
+        # Set to same day passed in
+        $week_start->Set( Format => 'unix', Value => $date->Unix );
+    }
+    else{
+        # Calculate date of first day of the week
+        my $seconds = Time::ParseDate::parsedate("last $first_day",
+            NOW => $date->Unix );
+        $week_start->Set( Format => 'unix', Value => $seconds );
+    }
+
+    return (1, $week_start);
+}
 
 =head1 AUTHOR
 

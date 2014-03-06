@@ -6,10 +6,7 @@
 
 <script type="text/javascript">
 jQuery( function() {
-    if ( <% $offset %> != 6 ) { // Sunday
-        // Monday's $offset is 0, that's why we +1 here
-        jQuery("div.time_tracking input[name=Date]").datepicker( 'option', 'firstDay', <% $offset + 1 %> );
-    }
+        jQuery("div.time_tracking input[name=Date]").datepicker( 'option', 'firstDay', <% ($week_start->Localtime('user'))[6] %> );
 });
 
 </script>
@@ -170,36 +167,12 @@ if ($Date) {
 }
 $date->SetToMidnight( Timezone => 'user' );
 
-my @week_name = qw/Monday Tuesday Wednesday Thursday Friday Saturday Sunday/;
-my %week_index;
-{
-    my $index = 0;
-    %week_index = map { $_ => $index++ } @week_name;
-}
-
-my $first_day = RT->Config->Get('TimeTrackingFirstDayOfWeek');
-my $offset = 0;
-if ( $first_day && $first_day !~ /Monday/i ) {
-    $first_day = ucfirst lc $first_day;
-    if ( $week_index{$first_day} ) {
-        $offset = $week_index{$first_day};
-        @week_name = ( @week_name[$week_index{$first_day}..$#week_name],@week_name[0 .. $week_index{$first_day}-1] );
-    }
-    else {
-        RT->Logger->warning("Invalid TimeTrackingFirstDayOfWeek value($first_day), should be one of Monday, Tuesday, etc.");
-    }
-}
-
-my $wday = ($date->Localtime('user'))[6] || 7;
-$wday -= $offset;
-$wday += 7 if $wday < 0;
-my $week_start = RT::Date->new($user);
-$week_start->Set( Value => $date->Unix );
-$week_start->AddDays( -1 * $wday + 1 ) unless $wday == 1;
+my ($ret, $week_start) = RT::Extension::TimeTracking::WeekStartDate($user,
+    $date, RT->Config->Get('TimeTrackingFirstDayOfWeek'));
 
 my $week_end = RT::Date->new($user);
-$week_end->Set( Value => $date->Unix );
-$week_end->AddDays( 8 - $wday );
+$week_end->Set( Value => $week_start->Unix );
+$week_end->AddDays( 6 );
 
 my %week_worked;
 
@@ -209,7 +182,7 @@ for my $offset ( 0 .. 6 ) {
     $date->AddDays( $offset ) if $offset;
     $week_worked{$date->ISO(Time => 0, Timezone => 'user')} = {
         date => $date,
-        week_name => $week_name[$offset],
+        week_name => $RT::Extension::TimeTracking::DAYS_OF_WEEK[$offset],
         tickets => {},
     };
 }
