@@ -34,6 +34,10 @@ our %WEEK_INDEX = (
 
 RT-Extension-TimeTracking - Time Tracking Extension
 
+=head1 RT VERSION
+
+Works with RT 4.2
+
 =head1 INSTALLATION
 
 =over
