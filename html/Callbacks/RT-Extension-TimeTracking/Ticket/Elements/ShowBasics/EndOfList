@@ -46,7 +46,7 @@ input#<% $cf_style %> {
   <td class="value">
     <form action="<% RT->Config->Get("WebPath") %>/Ticket/Display.html" method="POST">
       <input type="hidden" name="id" value="<% $TicketObj->id %>">
-      <& /Elements/SelectDate, Name => "$cf_name", current => 0, ShowTime => 0, Default => $today->Date &>
+      <& /Elements/SelectDate, Name => "$cf_name", current => 0, ShowTime => 0, Default => $today->Date( Timezone => 'user') &>
       <& /Elements/EditTimeValue,
           Name    => "UpdateTimeWorked",
           Default => $ARGS{UpdateTimeWorked} || '',
