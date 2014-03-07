@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RT::Extension::TimeTracking;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 RT->AddStyleSheets("time_tracking.css");
 RT->AddJavaScript("time_tracking.js");
@@ -58,6 +58,8 @@ in case changes need to be made to your database.
 
 =item patch RT
 
+Only run this the first time you install this module.
+
     patch -p1 -d /path/to/rt < etc/0001-handle-txn-cfs-on-ticket-creation-and-updates-with-U.patch
 
 =item Edit your F</opt/rt4/etc/RT_SiteConfig.pm>
@@ -68,11 +70,6 @@ Add this line:
 
 or add C<RT::Extension::TimeTracking> to your existing C<@Plugins> line.
 
-The default week start day in MyWeek page is Monday, you can change it by
-setting C<$TimeTrackingFirstDayOfWeek>, e.g.
-
-    Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
-
 =item Clear your mason cache
 
     rm -rf /opt/rt4/var/mason_data/obj
@@ -80,6 +77,15 @@ setting C<$TimeTrackingFirstDayOfWeek>, e.g.
 =item Restart your webserver
 
 =back
+
+=head1 CONFIGURATION
+
+=head2 C<$TimeTrackingFirstDayOfWeek>
+
+The default week start day in MyWeek page is Monday, you can change it by
+setting C<$TimeTrackingFirstDayOfWeek>, e.g.
+
+    Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
 
 =head1 METHODS
 

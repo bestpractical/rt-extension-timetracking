@@ -17,6 +17,8 @@ INSTALLATION
         in case changes need to be made to your database.
 
     patch RT
+        Only run this the first time you install this module.
+
             patch -p1 -d /path/to/rt < etc/0001-handle-txn-cfs-on-ticket-creation-and-updates-with-U.patch
 
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
@@ -26,15 +28,17 @@ INSTALLATION
 
         or add "RT::Extension::TimeTracking" to your existing @Plugins line.
 
-        The default week start day in MyWeek page is Monday, you can change
-        it by setting $TimeTrackingFirstDayOfWeek, e.g.
-
-            Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
-
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
 
     Restart your webserver
+
+CONFIGURATION
+  $TimeTrackingFirstDayOfWeek
+    The default week start day in MyWeek page is Monday, you can change it
+    by setting $TimeTrackingFirstDayOfWeek, e.g.
+
+        Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
 
 METHODS
   WeekStartDate

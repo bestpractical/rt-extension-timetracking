@@ -1,0 +1,9 @@
+Revision history for RT-Extension-TimeTracking
+
+0.02    2014-03-07
+        * Use the user's timezone to set the default date for entering time
+        * Refactor first day of week handling to avoid flipping to the next
+          week on the last day of the week
+
+0.01    2013-12-19
+        * Initial release.
