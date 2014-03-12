@@ -42,6 +42,9 @@ jQuery( function() {
 <th class="collection-as-table"><&|/l&>Subject</&></th>
 <th class="collection-as-table"><&|/l&>Status</&></th>
 <th class="collection-as-table"><&|/l&>Owner</&></th>
+% if ( $display_cf ){
+<th class="collection-as-table"><% $display_cf %></th>
+% }
 <th class="collection-as-table"><&|/l&>Time Worked</&></th>
 <th class="collection-as-table"><&|/l&>Update</&></th>
 </tr>
@@ -58,6 +61,9 @@ jQuery( function() {
 </td>
 <td class="collection-as-table"><% $ticket->Status %></td>
 <td class="collection-as-table"><% $ticket->OwnerObj->Name %></td>
+% if ( $display_cf ){
+<td class="collection-as-table"><% $ticket->FirstCustomFieldValue($display_cf) %></td>
+% }
 <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $entry->{time_worked} &></td>
 <td class="collection-as-table">
 <form method="POST">
@@ -157,6 +163,19 @@ if ( defined $ARGS{'UpdateTimeWorked'} ) {
         Actions   => \@results,
         Arguments => { Date => $Date, DefaultTimeUnits => $DefaultTimeUnits, User => $User },
     );
+}
+
+# Do we need to load a CF for display?
+my $display_cf;
+if ( $display_cf = RT->Config->Get('TimeTrackingDisplayCF') ){
+    my $confirm_cf = RT::CustomField->new(RT->SystemUser);
+    my ($ret, $msg) = $confirm_cf->Load($display_cf);
+
+    if ( not $ret ){
+        RT::Logger->error("Unable to load custom field $display_cf "
+        . "defined via config option TimeTrackingDisplayCF: $msg");
+        undef $display_cf;
+    }
 }
 
 my $date = RT::Date->new($user);

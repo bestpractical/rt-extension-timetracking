@@ -91,6 +91,15 @@ setting C<$TimeTrackingFirstDayOfWeek>, e.g.
 
     Set($TimeTrackingFirstDayOfWeek, 'Wednesday');
 
+=head2 C<$TimeTrackingDisplayCF>
+
+In the ticket listings on the My Week page, there is a room for an additional
+field next to Status, Owner, etc. To display a custom field that might be
+helpful when filling out your timesheet, you can set $TimeTrackingDisplayCF
+to the name of that custom field. In the display, that field name will be
+added to the ticket heading between Owner and Time Worked for each
+day on My Week. The value will be populated for each ticket.
+
 =head1 METHODS
 
 =head2 WeekStartDate
