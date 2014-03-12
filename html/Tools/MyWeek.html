@@ -188,6 +188,11 @@ for my $offset ( 0 .. 6 ) {
     my $date = RT::Date->new($user);
     $date->Set( Value => $week_start->Unix );
     $date->AddDays( $offset ) if $offset;
+    my $user_hour = ($date->Localtime('user'))[2];
+    if ( $user_hour == 23 ) {
+        $date->AddSeconds(3600); # to get around isuses raised by daylight saving
+    }
+
     $week_worked{$date->ISO(Time => 0, Timezone => 'user')} = {
         date => $date,
         week_name => $week_names[$offset],
