@@ -176,13 +176,21 @@ $week_end->AddDays( 7 );
 
 my %week_worked;
 
+my @week_names = @RT::Extension::TimeTracking::DAYS_OF_WEEK;
+if ( RT->Config->Get('TimeTrackingFirstDayOfWeek') ) {
+    my $offset = $RT::Extension::TimeTracking::WEEK_INDEX{RT->Config->Get('TimeTrackingFirstDayOfWeek')};
+    if ( $offset ) {
+        @week_names = @week_names[$offset .. $#week_names, 0 .. $offset -1 ];
+    }
+}
+
 for my $offset ( 0 .. 6 ) {
     my $date = RT::Date->new($user);
     $date->Set( Value => $week_start->Unix );
     $date->AddDays( $offset ) if $offset;
     $week_worked{$date->ISO(Time => 0, Timezone => 'user')} = {
         date => $date,
-        week_name => $RT::Extension::TimeTracking::DAYS_OF_WEEK[$offset],
+        week_name => $week_names[$offset],
         tickets => {},
     };
 }
