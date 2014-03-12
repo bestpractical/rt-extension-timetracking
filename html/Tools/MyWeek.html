@@ -172,7 +172,7 @@ my ($ret, $week_start) = RT::Extension::TimeTracking::WeekStartDate($user,
 
 my $week_end = RT::Date->new($user);
 $week_end->Set( Value => $week_start->Unix );
-$week_end->AddDays( 6 );
+$week_end->AddDays( 7 );
 
 my %week_worked;
 
