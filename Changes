@@ -1,5 +1,10 @@
 Revision history for RT-Extension-TimeTracking
 
+0.03    2014-03-12
+        * Fix daylight savings time issue
+        * Fix week end offset
+        * Fix weekday name in timesheet when custom first day of week selected
+
 0.02    2014-03-07
         * Use the user's timezone to set the default date for entering time
         * Refactor first day of week handling to avoid flipping to the next
