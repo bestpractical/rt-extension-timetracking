@@ -1,5 +1,8 @@
 Revision history for RT-Extension-TimeTracking
 
+0.04    2014-03-13
+        * Add $TimeTrackingDisplayCF feature
+
 0.03    2014-03-12
         * Fix daylight savings time issue
         * Fix week end offset
