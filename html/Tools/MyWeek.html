@@ -193,8 +193,8 @@ if ($Date) {
 }
 $date->SetToMidnight( Timezone => 'user' );
 
-my ($ret, $week_start) = RT::Extension::TimeTracking::WeekStartDate($user,
-    $date, RT->Config->Get('TimeTrackingFirstDayOfWeek'));
+my ($ret, $week_start, $first_day) = RT::Extension::TimeTracking::WeekStartDate(
+    $user, $date, RT->Config->Get('TimeTrackingFirstDayOfWeek'));
 
 my $week_end = RT::Date->new($user);
 $week_end->Set( Value => $week_start->Unix );
@@ -203,11 +203,9 @@ $week_end->AddDays( 7 );
 my %week_worked;
 
 my @week_names = @RT::Extension::TimeTracking::DAYS_OF_WEEK;
-if ( RT->Config->Get('TimeTrackingFirstDayOfWeek') ) {
-    my $offset = $RT::Extension::TimeTracking::WEEK_INDEX{RT->Config->Get('TimeTrackingFirstDayOfWeek')};
-    if ( $offset ) {
-        @week_names = @week_names[$offset .. $#week_names, 0 .. $offset -1 ];
-    }
+my $day_offset = $RT::Extension::TimeTracking::WEEK_INDEX{$first_day};
+if ( $day_offset ) {
+    @week_names = @week_names[$day_offset .. $#week_names, 0 .. $day_offset -1 ];
 }
 
 for my $offset ( 0 .. 6 ) {

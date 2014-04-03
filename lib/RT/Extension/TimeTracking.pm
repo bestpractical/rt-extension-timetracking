@@ -109,7 +109,14 @@ Tuesday, etc.) and calculates the start date for the week the date object is
 in using the passed day as the first day of the week. The default
 first day of the week is Monday.
 
-Returns an RT::Date object set to the calculated date.
+Returns:
+
+($ret, $week_start, $first_day)
+
+where $ret is true on success, false on error, $week_start is an RT::Date
+object set to the calculated date, and $first_day is a string of the first
+day of the week, either from $TimeTrackingFirstDayOfWeek or the default of
+Monday.
 
 =cut
 
@@ -141,7 +148,7 @@ sub WeekStartDate {
         $week_start->Set( Format => 'unix', Value => $seconds );
     }
 
-    return (1, $week_start);
+    return (1, $week_start, $first_day);
 }
 
 =head1 AUTHOR
