@@ -143,6 +143,7 @@ sub WeekStartDate {
     }
     else{
         # Calculate date of first day of the week
+        require Time::ParseDate;
         my $seconds = Time::ParseDate::parsedate("last $first_day",
             NOW => $date->Unix );
         $week_start->Set( Format => 'unix', Value => $seconds );
