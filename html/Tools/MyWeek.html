@@ -163,7 +163,7 @@ for my $id ( sort { $a <=> $b } keys %worked ) {
 
     if ( $ticket->id ) {
         my ( $val, $msg, $txn ) = $ticket->SetTimeWorked( $ticket->TimeWorked + $worked{$id} );
-        push( @results, $msg );
+        push( @results, "#$id: " . $msg );
         $txn->UpdateCustomFields( %ARGS ) if $txn;
     }
     else {
