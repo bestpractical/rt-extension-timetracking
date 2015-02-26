@@ -77,9 +77,8 @@ input#Date {
 % }
 <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $entry->{time_worked} &></td>
 <td class="collection-as-table">
-    <input name="id" type="hidden" value=<% $ticket->id %> />
     <& /Elements/EditTimeValue,
-        Name    => "UpdateTimeWorked",
+        Name    => 'Ticket-' . $ticket->id . "-UpdateTimeWorked",
         Default => '',
         InUnits => $DefaultTimeUnits || 'minutes',
     &>
@@ -152,25 +151,30 @@ $date_cf->LoadByName( Name => 'Worked Date', LookupType => 'RT::Queue-RT::Ticket
 my $actor_cf = RT::CustomField->new($user);
 $actor_cf->LoadByName( Name => 'Actor', LookupType => 'RT::Queue-RT::Ticket-RT::Transaction');
 
-if ( defined $ARGS{'UpdateTimeWorked'} ) {
-    RT::Interface::Web::PreprocessTimeUpdates(\%ARGS);
+my %worked = (
+    $ARGS{id} && $ARGS{'UpdateTimeWorked'} ? ( $ARGS{id} => $ARGS{'UpdateTimeWorked'} ) : (),
+    map { $ARGS{$_} && /^Ticket-(\d+)-UpdateTimeWorked$/ ? ( $1, $ARGS{$_} ) : () } keys %ARGS
+);
+
+RT::Interface::Web::PreprocessTimeUpdates(\%ARGS);
+for my $id ( sort { $a <=> $b } keys %worked ) {
     my $ticket = RT::Ticket->new( $user );
-    $ticket->Load($ARGS{id});
+    $ticket->Load($id);
 
     if ( $ticket->id ) {
-        my ( $val, $msg, $txn ) = $ticket->SetTimeWorked( $ticket->TimeWorked + $ARGS{'UpdateTimeWorked'} );
+        my ( $val, $msg, $txn ) = $ticket->SetTimeWorked( $ticket->TimeWorked + $worked{$id} );
         push( @results, $msg );
         $txn->UpdateCustomFields( %ARGS ) if $txn;
     }
     else {
         push @results, loc("Could not load ticket $ARGS{id}");
     }
-
-    MaybeRedirectForResults(
-        Actions   => \@results,
-        Arguments => { Date => $Date, DefaultTimeUnits => $DefaultTimeUnits, User => $User },
-    );
 }
+
+MaybeRedirectForResults(
+    Actions   => \@results,
+    Arguments => { Date => $Date, DefaultTimeUnits => $DefaultTimeUnits, User => $User },
+);
 
 # Do we need to load a CF for display?
 my $display_cf;
