@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RT::Extension::TimeTracking;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 RT->AddStyleSheets("time_tracking.css");
 RT->AddJavaScript("time_tracking.js");
