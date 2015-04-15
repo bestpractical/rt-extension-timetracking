@@ -5,12 +5,12 @@ RT VERSION
     Works with RT 4.2
 
 INSTALLATION
-    "perl Makefile.PL"
-    "make"
-    "make install"
+    perl Makefile.PL
+    make
+    make install
         May need root permissions
 
-    "make initdb"
+    make initdb
         Only run this the first time you install this module.
 
         If you run this twice, you may end up with duplicate data in your
@@ -27,9 +27,7 @@ INSTALLATION
     Edit your /opt/rt4/etc/RT_SiteConfig.pm
         Add this line:
 
-            Set(@Plugins, qw(RT::Extension::TimeTracking));
-
-        or add "RT::Extension::TimeTracking" to your existing @Plugins line.
+            Plugin('RT::Extension::TimeTracking');
 
     Clear your mason cache
             rm -rf /opt/rt4/var/mason_data/obj
@@ -69,18 +67,15 @@ METHODS
     the default of Monday.
 
 AUTHOR
-    sunnavy <sunnavy@bestpractical.com>
+    Best Practical Solutions, LLC <modules@bestpractical.com>
 
 BUGS
-    All bugs should be reported via email to
-    bug-RT-Extension-TimeTracking@rt.cpan.org
-    <mailto:bug-RT-Extension-TimeTracking@rt.cpan.org> or via the web at
-    rt.cpan.org
-    <http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-TimeTrack
-    ing>.
+    Since this module is not on CPAN, bugs should be reported via
+    <modules@bestpractical.com>, or via standard BPS support contract
+    channels.
 
-LICENSE AND COPYRIGHT
-    Copyright (c) 2013, Best Practical Solutions, LLC.
+COPYRIGHT
+    This extension is Copyright (C) 2013-2015 Best Practical Solutions, LLC.
 
     This is free software, licensed under:
 

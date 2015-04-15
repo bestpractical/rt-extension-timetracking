@@ -1,9 +1,8 @@
 use inc::Module::Install;
 
 RTx 'RT-Extension-TimeTracking';
-all_from 'lib/RT/Extension/TimeTracking.pm';
-readme_from 'lib/RT/Extension/TimeTracking.pm';
-license  'gplv2';
+
+requires_rt '4.2.0';
 
 my ($lp) = ($INC{'RT.pm'} =~ /^(.*)[\\\/]/);
 my $lib_path = join( ' ', "$RT::LocalPath/lib", $lp );

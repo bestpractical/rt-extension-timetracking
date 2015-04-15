@@ -1,15 +1,15 @@
 ---
-abstract: 'RT Extension-TimeTracking Extension'
+abstract: 'RT-Extension-TimeTracking Extension'
 author:
-  - 'sunnavy <sunnavy@bestpractical.com>'
+  - 'Best Practical Solutions, LLC <modules@bestpractical.com>'
 build_requires:
-  ExtUtils::MakeMaker: 6.36
+  ExtUtils::MakeMaker: 6.59
 configure_requires:
-  ExtUtils::MakeMaker: 6.36
+  ExtUtils::MakeMaker: 6.59
 distribution_type: module
 dynamic_config: 1
-generated_by: 'Module::Install version 1.06'
-license: gplv2
+generated_by: 'Module::Install version 1.14'
+license: gpl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
@@ -21,6 +21,10 @@ no_index:
     - inc
     - static
     - xt
+requires:
+  perl: 5.10.1
 resources:
   license: http://opensource.org/licenses/gpl-license.php
-version: 0.04
+version: '0.04'
+x_module_install_rtx_version: '0.37'
+x_requires_rt: 4.2.0

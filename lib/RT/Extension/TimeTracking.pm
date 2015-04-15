@@ -70,9 +70,7 @@ Only run this the first time you install this module.
 
 Add this line:
 
-    Set(@Plugins, qw(RT::Extension::TimeTracking));
-
-or add C<RT::Extension::TimeTracking> to your existing C<@Plugins> line.
+    Plugin('RT::Extension::TimeTracking');
 
 =item Clear your mason cache
 
@@ -154,19 +152,17 @@ sub WeekStartDate {
 
 =head1 AUTHOR
 
-sunnavy <sunnavy@bestpractical.com>
+Best Practical Solutions, LLC E<lt>modules@bestpractical.comE<gt>
 
 =head1 BUGS
 
-All bugs should be reported via email to
-L<bug-RT-Extension-TimeTracking@rt.cpan.org|mailto:bug-RT-Extension-TimeTracking@rt.cpan.org>
-or via the web at
-L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-TimeTracking>.
+Since this module is not on CPAN, bugs should be reported via
+E<lt>modules@bestpractical.comE<gt>, or via standard BPS support
+contract channels.
 
+=head1 COPYRIGHT
 
-=head1 LICENSE AND COPYRIGHT
-
-Copyright (c) 2013, Best Practical Solutions, LLC.
+This extension is Copyright (C) 2013-2015 Best Practical Solutions, LLC.
 
 This is free software, licensed under:
 
