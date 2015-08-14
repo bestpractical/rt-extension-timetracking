@@ -6,13 +6,32 @@
 
 <script type="text/javascript">
 jQuery( function() {
-        jQuery("div.time_tracking input[name=Date]").datepicker( 'option', 'firstDay', <% ($week_start->Localtime('user'))[6] %> );
+        var jDatePicker = jQuery("div.time_tracking input[name=Date]")
+        jDatePicker.datepicker( 'option', 'firstDay', <% ($week_start->Localtime('user'))[6] %> );
+
+        jQuery("#previous-week").click(function(e) {
+            e.preventDefault();
+            jDatePicker.val("<% $previous_week->Date(Format=>'ISO', Timezone => 'user') %>");
+            jDatePicker.change();
+        });
+
+        jQuery("#next-week").click(function(e) {
+            e.preventDefault();
+            jDatePicker.val("<% $week_end->Date(Format=>'ISO', Timezone => 'user') %>");
+            jDatePicker.change();
+        });
 });
 
 </script>
 <style type="text/css">
 input#Date {
     width: 177px;
+}
+.week-links a {
+    text-decoration: underline;
+}
+.week-links td:last-child{
+    text-align: right;
 }
 </style>
 <div class="time_tracking">
@@ -34,6 +53,10 @@ input#Date {
 <tr><td class="label">
 <&|/l&>Week of (pick any day in week)</&>:</td>
 <td class="value"><& /Elements/SelectDate, ShowTime => 0, Name => 'Date', Default => $date->Date(Format=>'ISO', Timezone => 'user') &></td></tr>
+<tr class="week-links">
+    <td><a href='#' id='previous-week'>&lt;&lt; Previous Week</a></td>
+    <td><a href='#' id='next-week'>Next Week &gt;&gt;</a></td>
+</tr>
 </table>
 </form>
 
@@ -333,6 +356,10 @@ while ( my $txn = $activity_txns->Next ) {
         time_worked => 0,
     }
 }
+
+my $previous_week = RT::Date->new($user);
+$previous_week->Set( Value => $week_start->Unix );
+$previous_week->AddDays( -7 );
 
 </%INIT>
 
