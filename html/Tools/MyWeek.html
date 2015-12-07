@@ -74,6 +74,7 @@ input#Date {
 <tr class="collection-as-table">
 <th class="collection-as-table"><&|/l&>id</&></th>
 <th class="collection-as-table"><&|/l&>Subject</&></th>
+<th class="collection-as-table"><&|/l&>Queue</&></th>
 <th class="collection-as-table"><&|/l&>Status</&></th>
 <th class="collection-as-table"><&|/l&>Owner</&></th>
 % if ( $display_cf ){
@@ -93,6 +94,7 @@ input#Date {
 <td class="collection-as-table">
 <a href="<% RT->Config->Get('WebPath') %>/Ticket/Display.html?id=<% $ticket->id %>"><% $ticket->Subject %></a>
 </td>
+<td class="collection-as-table"><% $ticket->QueueObj->Name %></td>
 <td class="collection-as-table"><% $ticket->Status %></td>
 <td class="collection-as-table"><% $ticket->OwnerObj->Name %></td>
 % if ( $display_cf ){
