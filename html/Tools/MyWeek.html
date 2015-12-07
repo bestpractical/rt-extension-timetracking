@@ -101,7 +101,7 @@ input#Date {
 <td class="collection-as-table"><% $ticket->FirstCustomFieldValue($display_cf) %></td>
 % }
 <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $entry->{time_worked} &></td>
-<td class="collection-as-table">
+<td class="collection-as-table update-time">
     <& /Elements/EditTimeValue,
         Name    => 'Ticket-' . $ticket->id . "-UpdateTimeWorked",
         Default => '',

@@ -8,6 +8,10 @@ div.day_entry {
     position: relative;
 }
 
+div.day_entry .update-time {
+    white-space: nowrap;
+}
+
 div.submit_day_time_button {
     position: absolute;
     bottom: 0;
