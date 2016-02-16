@@ -2,13 +2,12 @@
 use 5.008001; # sane UTF-8 support
 use strict;
 use warnings;
-package YAML::Tiny;
-# git description: v1.63-12-g5dd832a
-$YAML::Tiny::VERSION = '1.64';
+package YAML::Tiny; # git description: v1.68-2-gcc5324e
 # XXX-INGY is 5.8.1 too old/broken for utf8?
 # XXX-XDG Lancaster consensus was that it was sufficient until
 # proven otherwise
 
+our $VERSION = '1.69';
 
 #####################################################################
 # The YAML::Tiny API.
@@ -514,7 +513,7 @@ sub _load_hash {
         }
 
         if ( exists $hash->{$key} ) {
-            die \"YAML::Tiny found a duplicate key '$key' in line '$lines->[0]'";
+            warn "YAML::Tiny found a duplicate key '$key' in line '$lines->[0]'";
         }
 
         # Do we have a value?
@@ -872,4 +871,4 @@ delete $YAML::Tiny::{refaddr};
 
 __END__
 
-#line 1490
+#line 1489
