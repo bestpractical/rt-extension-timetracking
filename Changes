@@ -1,5 +1,9 @@
 Revision history for RT-Extension-TimeTracking
 
+0.06 2016-03-11
+ - Public release to CPAN.
+ - Documentation updates.
+
 0.05 2015-04-15
  - Updated layout for "My Week" page
  - Stop grouping "My Week" results by ticket id
