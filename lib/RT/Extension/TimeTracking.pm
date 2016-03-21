@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RT::Extension::TimeTracking;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 RT->AddStyleSheets("time_tracking.css");
 RT->AddJavaScript("time_tracking.js");
@@ -123,7 +123,7 @@ different day from the day you are recording the comment.
 
 =begin HTML
 
-<p><img src="http://static.bestpractical.com/images/timetracking/timetracking-basics-shadow.png"
+<p><img width="500px" src="http://static.bestpractical.com/images/timetracking/timetracking-basics-shadow.png"
 alt="Basics with TimeTracking" /></p>
 
 =end HTML
