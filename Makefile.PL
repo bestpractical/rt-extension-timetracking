@@ -1,7 +1,7 @@
 use inc::Module::Install;
 
 RTx 'RT-Extension-TimeTracking';
-
+repository('https://github.com/bestpractical/rt-extension-timetracking');
 requires_rt '4.2.0';
 
 my ($lp) = ($INC{'RT.pm'} =~ /^(.*)[\\\/]/);
@@ -26,5 +26,6 @@ substitute(
            qw(lib/RT/Extension/TimeTracking/Test.pm),
 );
 
+sign;
 auto_install();
 WriteAll;
