@@ -57,7 +57,10 @@ input#<% $cf_style %> {
   </td>
 </tr>
 
-% if ( $TicketObj->TimeWorked ) {
+% # Render if less than RT 4.4.0, (which includes per user time)
+% $RT::VERSION =~ /(\d+)\.(\d+)\.(\d+)/;
+% my $version = ($1*1000+$2);
+% if ( ($version < 4004) && $TicketObj->TimeWorked ) {
 <tr class="time worked">
     <td class="label"><&|/l&>Worked</&>:</td>
     <td>
