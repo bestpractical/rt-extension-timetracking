@@ -33,7 +33,8 @@ my $today = RT::Date->new($session{CurrentUser});
 $today->SetToNow();
 
 # Escape : so id declaration is parsed properly
-my $cf_style = $cf_name =~ s/:/\\:/gr;
+my $cf_style = $cf_name;
+$cf_style =~ s/:/\\:/g;
 
 </%init>
 <style type="text/css">
