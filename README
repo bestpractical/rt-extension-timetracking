@@ -146,6 +146,11 @@ METHODS
     of the first day of the week, either from $TimeTrackingFirstDayOfWeek or
     the default of Monday.
 
+  SetDateToMidnightForDST
+    Accepts an RT::Date object expected to be at midnight, but probably is
+    not yet because of DST, this method adjusts it accordingly. Note that
+    the adjustment is inplace.
+
 AUTHOR
     Best Practical Solutions, LLC <modules@bestpractical.com>
 
