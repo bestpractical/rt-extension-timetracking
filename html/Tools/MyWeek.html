@@ -321,8 +321,8 @@ my $cf_alias = $txns->Join(
 );
 $txns->Limit( ALIAS => $cf_alias, FIELD => 'CustomField', VALUE => $cf->id );
 $txns->Limit( ALIAS => $cf_alias, FIELD => 'ObjectType', VALUE => 'RT::Transaction' );
-$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_start->ISO(Time => 0), OPERATOR => '>=' );
-$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_end->ISO(Time => 0), OPERATOR => '<', ENTRYAGGREGATOR => 'AND', );
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_start->ISO(Time => 0, Timezone => 'user'), OPERATOR => '>=' );
+$txns->Limit( ALIAS => $cf_alias, FIELD => 'Content', VALUE => $week_end->ISO(Time => 0, Timezone => 'user'), OPERATOR => '<', ENTRYAGGREGATOR => 'AND', );
 
 while ( my $txn = $txns->Next ) {
     my $ticket = $txn->Object;
