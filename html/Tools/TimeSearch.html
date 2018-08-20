@@ -20,6 +20,10 @@
     <td class="label"><&|/l&>End Date</&>:</td>
     <td class="value"><& /Elements/SelectDate, ShowTime => 0, Name => 'EndDate', Default => $end_date->Date(Format=>'ISO', Timezone => 'user') &></td>
 </tr>
+<tr>
+    <td class="label"><&|/l&>Include All Children?</&></td>
+    <td class="value"><& /Widgets/Form/Boolean:InputOnly, Name => 'IncludeChildren', CurrentValue => $IncludeChildren &></td>
+</tr>
 </table>
 <& /Elements/Submit, Name => 'DoSearch', Label => loc("Search") &>
 </form>
@@ -136,7 +140,10 @@ if ( $ARGS{DoSearch} ) {
         Actions   => \@results,
         Arguments => { StartDate => $StartDate, EndDate => $EndDate, Query => $Query },
     );
-    my @ticket_ids = map { $_->id } @{ $tickets->ItemsArrayRef };
+
+    my @tickets = map { $_, $IncludeChildren ? ( RT::Extension::TimeTracking->AllChildren( $_ ) ) : () }
+      @{ $tickets->ItemsArrayRef };
+    my @ticket_ids = List::MoreUtils::uniq( map { $_->id } @tickets );
 
     my $txns = RT::Transactions->new( $user );
     $txns->Limit(
@@ -229,4 +236,5 @@ if ( $ARGS{DoSearch} ) {
 $Query => undef
 $StartDate => undef
 $EndDate => undef
+$IncludeChildren => 1
 </%ARGS>
