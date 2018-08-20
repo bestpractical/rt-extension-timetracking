@@ -30,6 +30,29 @@ our %WEEK_INDEX = (
     Saturday  => 6,
 );
 
+sub AllChildren {
+    my $self = shift;
+    my $ticket = shift or return;
+
+    my @tickets;
+    my %seen;
+
+    my $find_children;
+    $find_children = sub {
+        my $parent = shift;
+        my $links  = $parent->Members;
+        while ( my $link = $links->Next ) {
+            my $obj = $link->BaseObj;
+            next unless $obj && UNIVERSAL::isa( $obj, 'RT::Ticket' );
+            next if $seen{ $obj->id }++;
+            push @tickets, $obj;
+            $find_children->( $obj );
+        }
+    };
+    $find_children->( $ticket );
+    return @tickets;
+}
+
 =head1 NAME
 
 RT-Extension-TimeTracking - Time Tracking Extension
