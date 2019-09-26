@@ -34,7 +34,7 @@ $today->SetToNow();
 
 </%init>
 <div class="add-time form-row">
-  <div class="col-3 label"><&|/l&>Add to time</&> <&|/l&>worked:</&></div>
+  <div class="col-3 label input"><&|/l&>Add to time</&> <&|/l&>worked:</&></div>
   <div class="col-auto value">
     <form action="<% RT->Config->Get("WebPath") %>/Ticket/Display.html" method="POST">
       <input type="hidden" name="id" value="<% $TicketObj->id %>">
