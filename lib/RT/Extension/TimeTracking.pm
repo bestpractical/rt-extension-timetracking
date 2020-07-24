@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RT::Extension::TimeTracking;
 
-our $VERSION = '0.11';
+our $VERSION = '0.20';
 
 RT->AddStyleSheets("time_tracking.css");
 RT->AddJavaScript("time_tracking.js");
@@ -36,7 +36,7 @@ RT-Extension-TimeTracking - Time Tracking Extension
 
 =head1 RT VERSION
 
-Works with RT 5.0.
+Works with RT 5.0. Check 0.1* versions if you are using RT 4.
 
 =head1 INSTALLATION
 

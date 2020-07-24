@@ -2,7 +2,7 @@ NAME
     RT-Extension-TimeTracking - Time Tracking Extension
 
 RT VERSION
-    Works with RT 5.0.
+    Works with RT 5.0. Check 0.1* versions if you are using RT 4.
 
 INSTALLATION
     perl Makefile.PL
