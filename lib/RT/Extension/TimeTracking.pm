@@ -278,7 +278,7 @@ Or via the web at: L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Nam
 
 =head1 COPYRIGHT
 
-This extension is Copyright (C) 2013-2018 Best Practical Solutions, LLC.
+This extension is Copyright (C) 2013-2020 Best Practical Solutions, LLC.
 
 This is free software, licensed under:
 
