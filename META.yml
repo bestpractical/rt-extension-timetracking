@@ -28,4 +28,4 @@ resources:
   repository: https://github.com/bestpractical/rt-extension-timetracking
 version: '0.11'
 x_module_install_rtx_version: '0.42'
-x_requires_rt: 4.2.0
+x_requires_rt: 5.0.0
