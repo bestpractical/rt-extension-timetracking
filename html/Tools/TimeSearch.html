@@ -7,25 +7,27 @@
 <div class="time_tracking time_search">
 
 <form>
-<table>
-<tr>
-    <td class="label"><&|/l&>Ticket Query</&>:</td>
-    <td class="value"><textarea name="Query" rows="8" cols="72"><% $Query %></textarea></td>
-</tr>
-<tr>
-    <td class="label"><&|/l&>Start Date</&>:</td>
-    <td class="value"><& /Elements/SelectDate, ShowTime => 0, Name => 'StartDate', Default => $start_date->Date(Format=>'ISO', Timezone => 'user') &></td>
-</tr>
-<tr>
-    <td class="label"><&|/l&>End Date</&>:</td>
-    <td class="value"><& /Elements/SelectDate, ShowTime => 0, Name => 'EndDate', Default => $end_date->Date(Format=>'ISO', Timezone => 'user') &></td>
-</tr>
-<tr>
-    <td class="label"><&|/l&>Include All Children?</&></td>
-    <td class="value"><& /Widgets/Form/Boolean:InputOnly, Name => 'IncludeChildren', CurrentValue => $IncludeChildren &></td>
-</tr>
-</table>
-<& /Elements/Submit, Name => 'DoSearch', Label => loc("Search") &>
+  <div class="form-row">
+    <div class="col-3 label"><&|/l&>Ticket Query</&>:</div>
+    <div class="col-9 value"><textarea name="Query" rows="8" cols="72"><% $Query %></textarea></div>
+  </div>
+  <div class="form-row">
+      <div class="col-3 label"><&|/l&>Start Date</&>:</div>
+      <div class="col-9 value"><& /Elements/SelectDate, ShowTime => 0, Name => 'StartDate', Default => $start_date->Date(Format=>'ISO', Timezone => 'user') &></div>
+  </div>
+  <div class="form-row">
+      <div class="col-3 label"><&|/l&>End Date</&>:</div>
+      <div class="col-9 value"><& /Elements/SelectDate, ShowTime => 0, Name => 'EndDate', Default => $end_date->Date(Format=>'ISO', Timezone => 'user') &></div>
+  </div>
+  <div class="form-row include-children">
+      <div class="col-3 label"><&|/l&>Include All Children?</&></div>
+      <div class="col-9 value"><& /Widgets/Form/Boolean:InputOnly, Name => 'IncludeChildren', CurrentValue => $IncludeChildren &></div>
+  </div>
+  <div class="form-row">
+    <div class="col-12">
+      <& /Elements/Submit, Name => 'DoSearch', Label => loc("Search") &>
+    </div>
+  </div>
 </form>
 
 % if ( $ARGS{DoSearch} ) {

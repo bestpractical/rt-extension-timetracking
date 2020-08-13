@@ -38,3 +38,6 @@ div.time_tracking h2 {
     margin-top: 30px;
 }
 
+div.time_tracking div.include-children div.value {
+    margin-top: 5px;
+}
