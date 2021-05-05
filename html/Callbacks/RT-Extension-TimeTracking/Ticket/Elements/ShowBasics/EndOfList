@@ -55,6 +55,61 @@ $today->SetToNow();
     </form>
   </div>
 </div>
+<script>
+var timeTrackingStart = Date.now()
+var timeTrackerTimer
+
+window.timeSpent = function() {
+    // time worked in minutes
+    return Math.ceil( (Date.now() - timeTrackingStart) / (1000 * 60) )
+}
+
+window.parseUrl = function(url) {
+    url = url || ''
+    var parts = url.split("?")
+    return {href: url, path: parts[0], query: parts.length > 1 ? parts[1] : ''}
+}
+
+
+window.parseQuery = function(str) {
+    var params = {}
+    str = str || ''
+    var parts = str.split("?")
+    str = parts.length < 2 ? str : parts[1]
+    var pairs = str.split(/[&;]/)  // NB: RT sometimes uses nonstandard param sep!
+    pairs.forEach(function(pair) {
+        var parts = pair.split("=")
+        if (parts.length === 2) {
+            var key = decodeURIComponent(parts[0])
+            var val = decodeURIComponent(parts[1])
+            params[key] = val
+        }
+    })
+    return params
+}
+
+jQuery(document).ready(function() {
+    var fn = function() {
+        var tm = timeSpent()
+
+        // uncomment to have time auto-increment visibly on the Display page
+        jQuery('input[name="UpdateTimeWorked"]').val(tm)
+        jQuery('select[name="UpdateTimeWorked-TimeUnits"]').val("minutes")
+
+        // loop over the actions menu links and append UpdateTimeWorked value
+        jQuery("#li-page-actions li a").each(function() {
+            var el = jQuery(this)
+            var url = parseUrl(el.attr("href"))
+            var qry = parseQuery(url.href)
+            qry.UpdateTimeWorked = tm
+            el.attr("href", url.path + '?' + jQuery.param(qry))
+        })
+    }
+
+    // auto-update every 10 seconds
+    timeTrackerTimer = setInterval(fn, 10 * 1000)
+})
+</script>
 
 <%args>
 $TicketObj
