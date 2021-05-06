@@ -56,22 +56,21 @@ $today->SetToNow();
   </div>
 </div>
 <script>
-var timeTrackingStart = Date.now()
+var timeTrackingStart
 var timeTrackerTimer
 
-window.timeSpent = function() {
+var timeSpent = function() {
     // time worked in minutes
     return Math.ceil( (Date.now() - timeTrackingStart) / (1000 * 60) )
 }
 
-window.parseUrl = function(url) {
+var parseUrl = function(url) {
     url = url || ''
     var parts = url.split("?")
     return {href: url, path: parts[0], query: parts.length > 1 ? parts[1] : ''}
 }
 
-
-window.parseQuery = function(str) {
+var parseQuery = function(str) {
     var params = {}
     str = str || ''
     var parts = str.split("?")
@@ -89,21 +88,37 @@ window.parseQuery = function(str) {
 }
 
 jQuery(document).ready(function() {
+    jQuery('input[name="UpdateTimeWorked"]').on("keyup", function() {
+        clearInterval(timeTrackerTimer)
+    })
+
     var fn = function() {
         var tm = timeSpent()
+
+        var addTimeToLink = function() {
+            var el = jQuery(this)
+            var url = parseUrl(el.attr("href"))
+            var qry = parseQuery(url.href)
+            qry.UpdateTimeWorked = tm
+            el.attr("href", url.path + '?' + jQuery.param(qry))
+        }
 
         // uncomment to have time auto-increment visibly on the Display page
         jQuery('input[name="UpdateTimeWorked"]').val(tm)
         jQuery('select[name="UpdateTimeWorked-TimeUnits"]').val("minutes")
 
         // loop over the actions menu links and append UpdateTimeWorked value
-        jQuery("#li-page-actions li a").each(function() {
-            var el = jQuery(this)
-            var url = parseUrl(el.attr("href"))
-            var qry = parseQuery(url.href)
-            qry.UpdateTimeWorked = tm
-            el.attr("href", url.path + '?' + jQuery.param(qry))
-        })
+        jQuery("#li-page-actions li a").each(addTimeToLink)
+        jQuery("div.history-container span.actions a").each(addTimeToLink)
+    }
+
+    // set the starting time (adding any original number of millis from the form field)
+    var orig = 0
+    try {
+        orig = parseInt(jQuery('input[name="UpdateTimeWorked"]').val(), 10)
+        if (isNaN(orig)) { orig = 0 }
+    } finally {
+        timeTrackingStart = Date.now() - ( orig * 60 * 1000 )
     }
 
     // auto-update every 10 seconds
