@@ -59,9 +59,19 @@ $today->SetToNow();
 var timeTrackingStart
 var timeTrackerTimer
 
+var ToMMSS = function (Total) {
+    var Minutes = Math.floor(Total / 60);
+    var Seconds = Total - (Minutes * 60);
+
+    if (Minutes < 10) { Minutes = "0" + Minutes; }
+    if (Seconds < 10) { Seconds = "0" + Seconds; }
+
+    return Minutes + ':' + Seconds;
+}
+
 var timeSpent = function() {
-    // time worked in minutes
-    return Math.ceil( (Date.now() - timeTrackingStart) / (1000 * 60) )
+    // time worked in seconds
+    return Math.ceil( (Date.now() - timeTrackingStart) / 1000 )
 }
 
 var parseUrl = function(url) {
@@ -93,7 +103,10 @@ jQuery(document).ready(function() {
     })
 
     var fn = function() {
-        var tm = timeSpent()
+        // Time in minutes for submission
+        // Round down to be consistent with RTs ticket timer
+        var tm = Math.floor( timeSpent() / 60 )
+        var tm_show = ToMMSS( timeSpent() )
 
         var addTimeToLink = function() {
             var el = jQuery(this)
@@ -104,7 +117,7 @@ jQuery(document).ready(function() {
         }
 
         // uncomment to have time auto-increment visibly on the Display page
-        jQuery('input[name="UpdateTimeWorked"]').val(tm)
+        jQuery('input[name="UpdateTimeWorked"]').val(tm_show)
         jQuery('select[name="UpdateTimeWorked-TimeUnits"]').val("minutes")
 
         // loop over the actions menu links and append UpdateTimeWorked value
@@ -122,7 +135,7 @@ jQuery(document).ready(function() {
     }
 
     // auto-update every 10 seconds
-    timeTrackerTimer = setInterval(fn, 10 * 1000)
+    timeTrackerTimer = setInterval(fn, 1 * 1000)
 })
 </script>
 

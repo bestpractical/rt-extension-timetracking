@@ -1,0 +1,9 @@
+<%init>
+# Trim off seconds that may have been added by the auto timer
+if ( $ARGSRef->{'UpdateTimeWorked'} and $ARGSRef->{'UpdateTimeWorked'} =~ /(\d+)\:\d\d$/ ) {
+    $ARGSRef->{'UpdateTimeWorked'} = int($1);
+}
+</%init>
+<%args>
+$ARGSRef
+</%args>
