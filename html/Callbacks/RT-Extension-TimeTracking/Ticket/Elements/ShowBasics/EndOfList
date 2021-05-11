@@ -50,6 +50,7 @@ $today->SetToNow();
         </div>
         <div class="col-auto">
           <input type="submit" class="btn btn-primary form-control" value="<% loc('Add') %>">
+          <span id="elapsed-minutes" class="small text-muted"></span>
         </div>
       </div>
     </form>
@@ -59,19 +60,14 @@ $today->SetToNow();
 var timeTrackingStart
 var timeTrackerTimer
 
-var ToMMSS = function (Total) {
-    var Minutes = Math.floor(Total / 60);
-    var Seconds = Total - (Minutes * 60);
-
-    if (Minutes < 10) { Minutes = "0" + Minutes; }
-    if (Seconds < 10) { Seconds = "0" + Seconds; }
-
-    return Minutes + ':' + Seconds;
+var rawTimeSpent = function() {
+    // raw time worked in seconds, as a float
+    return (Date.now() - timeTrackingStart) / (1000)
 }
 
 var timeSpent = function() {
-    // time worked in seconds
-    return Math.ceil( (Date.now() - timeTrackingStart) / 1000 )
+    // time worked in minutes, as an int (always round up)
+    return Math.ceil( rawTimeSpent() / 60 )
 }
 
 var parseUrl = function(url) {
@@ -97,9 +93,21 @@ var parseQuery = function(str) {
     return params
 }
 
+var toHHMMSS = function(floatSecs) {
+    var hours   = Math.floor(floatSecs / 3600)
+    var minutes = Math.floor((floatSecs - (hours * 3600)) / 60)
+    var seconds = Math.round(floatSecs - (hours * 3600) - (minutes * 60))
+    if (hours   < 10) { hours   = '0' + hours }
+    if (minutes < 10) { minutes = '0' + minutes }
+    if (seconds < 10) { seconds = '0' + seconds }
+    return hours + ':' + minutes + ':' + seconds
+}
+
 jQuery(document).ready(function() {
+    // when the timeworked is updated manualy, stop the autotimer
     jQuery('input[name="UpdateTimeWorked"]').on("keyup", function() {
         clearInterval(timeTrackerTimer)
+        jQuery('#elapsed-minutes').text('')
     })
 
     var fn = function() {
@@ -116,9 +124,9 @@ jQuery(document).ready(function() {
             el.attr("href", url.path + '?' + jQuery.param(qry))
         }
 
-        // uncomment to have time auto-increment visibly on the Display page
-        jQuery('input[name="UpdateTimeWorked"]').val(tm_show)
+        jQuery('input[name="UpdateTimeWorked"]').val(tm)
         jQuery('select[name="UpdateTimeWorked-TimeUnits"]').val("minutes")
+        jQuery('#elapsed-minutes').text( toHHMMSS( rawTimeSpent() ) )
 
         // loop over the actions menu links and append UpdateTimeWorked value
         jQuery("#li-page-actions li a").each(addTimeToLink)
@@ -134,7 +142,7 @@ jQuery(document).ready(function() {
         timeTrackingStart = Date.now() - ( orig * 60 * 1000 )
     }
 
-    // auto-update every 10 seconds
+    // auto-update every second
     timeTrackerTimer = setInterval(fn, 1 * 1000)
 })
 </script>
