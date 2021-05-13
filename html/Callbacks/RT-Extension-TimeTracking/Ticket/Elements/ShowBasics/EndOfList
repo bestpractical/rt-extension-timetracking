@@ -1,5 +1,4 @@
 <%init>
-
 my $time_worked;
 if ( $TicketObj->TimeWorked ) {
     $time_worked = {};
@@ -32,6 +31,13 @@ my $cf_name = 'Object-RT::Transaction--CustomField-'
 my $today = RT::Date->new($session{CurrentUser});
 $today->SetToNow();
 
+# Restore the time if we had a running timer
+my $running_key = 'RunningTimeWorked' . $TicketObj->Id;
+if ( $session{$running_key} && !$ARGS{UpdateTimeWorked} ) {
+    $ARGS{UpdateTimeWorked} = $session{$running_key};
+    delete $session{$running_key};
+}
+
 </%init>
 <div class="add-time form-row">
   <div class="col-3 label input"><&|/l&>Add to time</&> <&|/l&>worked:</&></div>
@@ -46,7 +52,7 @@ $today->SetToNow();
           <input name="UpdateTimeWorked" type="text" value="<% $ARGS{UpdateTimeWorked} || '' %>" size="5" class="form-control" />
         </div>
         <div class="col-auto">
-          <& /Elements/SelectTimeUnits, Name => 'UpdateTimeWorked-TimeUnits', Default => $ARGS{'UpdateTimeWorked-TimeUnits'} || 'minutes' &>
+          <input type="text" name="UpdateTimeWorked-TimeUnits" disabled="disabled" value="minutes" class="form-control" size="5" />
         </div>
         <div class="col-auto">
           <input type="submit" class="btn btn-primary form-control" value="<% loc('Add') %>">
@@ -100,6 +106,13 @@ var parseQuery = function(str) {
 jQuery(document).ready(function() {
     jQuery('input[name="UpdateTimeWorked"]').on("keyup", function() {
         clearInterval(timeTrackerTimer)
+    })
+
+    jQuery('input[type="submit"][value="Save"').click(function() {
+        jQuery("<input />").attr("type", "hidden")
+                  .attr("name", "RunningTimeWorked")
+                  .attr("value", jQuery('input[name="UpdateTimeWorked"]').val())
+                  .appendTo(".inline-edit");
     })
 
     var fn = function() {

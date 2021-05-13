@@ -1,4 +1,16 @@
 <%init>
+return unless $ARGSRef->{'id'};
+my $TicketObj = LoadTicket($ARGSRef->{'id'});
+
+if ( $ARGSRef->{'RunningTimeWorked'} ) {
+    my $time = $ARGSRef->{'RunningTimeWorked'};
+
+    # Should be in MM:SS format, convert to minutes
+    # TODO: would be nice to keep the seconds
+    my ($min, $sec) = split /:/, $time;
+    $session{'RunningTimeWorked' . $TicketObj->Id} = $min;
+}
+
 # Trim off seconds that may have been added by the auto timer
 if ( $ARGSRef->{'UpdateTimeWorked'} and $ARGSRef->{'UpdateTimeWorked'} =~ /(\d+)\:\d\d$/ ) {
     $ARGSRef->{'UpdateTimeWorked'} = int($1);
