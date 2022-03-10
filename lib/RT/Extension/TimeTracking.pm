@@ -60,6 +60,7 @@ RT-Extension-TimeTracking - Time Tracking Extension
 =head1 RT VERSION
 
 Works with RT 5.0. Check 0.1* versions if you are using RT 4.
+Also supported in RTIR 5.0.3 and later.
 
 =head1 INSTALLATION
 
