@@ -19,6 +19,32 @@
       <div class="col-3 label"><&|/l&>End Date</&>:</div>
       <div class="col-9 value"><& /Elements/SelectDate, ShowTime => 0, Name => 'EndDate', Default => $end_date->Date(Format=>'ISO', Timezone => 'user') &></div>
   </div>
+  <div class="form-row">
+      <div class="col-3 label"><&|/l&>Time Worked Display</&>:</div>
+      <div class="col-9 value">
+          <div class="custom-control custom-radio">
+            <input type="radio" name="TimeWorkedDisplay" value="1" class="custom-control-input"
+                    id="TimeWorkedDisplay1"
+                    <% $TimeWorkedDisplay == 1 ? 'checked="checked"' : '' %> />
+            <label for="TimeWorkedDisplay1"
+                class="custom-control-label"><&|/l&>Exact time, hours and minutes</&></label><br>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" name="TimeWorkedDisplay" value="2" class="custom-control-input"
+                    id="TimeWorkedDisplay2"
+                    <% $TimeWorkedDisplay == 2 ? 'checked="checked"' : '' %> />
+            <label for="TimeWorkedDisplay2"
+                class="custom-control-label"><&|/l&>Hours only, rounded up</&></label><br>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" name="TimeWorkedDisplay" value="3" class="custom-control-input"
+                    id="TimeWorkedDisplay3"
+                    <% $TimeWorkedDisplay == 3 ? 'checked="checked"' : '' %> />
+            <label for="TimeWorkedDisplay3"
+                class="custom-control-label"><&|/l&>Hours only, rounded to nearest hour</&></label><br>
+          </div>
+      </div>
+  </div>
   <div class="form-row include-children">
       <div class="col-3 label"><&|/l&>Include All Children?</&></div>
       <div class="col-9 value"><& /Widgets/Form/Boolean:InputOnly, Name => 'IncludeChildren', CurrentValue => $IncludeChildren &></div>
@@ -194,7 +220,6 @@ if ( $ARGS{DoSearch} ) {
         next if $txn->FirstCustomFieldValue( 'Worked Date' );    # we handle this in the next part
         $ticket_worked{ $ticket->id } ||= { ticket => $ticket, };
         $ticket_worked{ $ticket->id }{time_worked} += $txn->TimeTaken;
-        $total_time_worked += $txn->TimeTaken;
     }
 
     $txns = RT::Transactions->new( $user );
@@ -242,8 +267,26 @@ if ( $ARGS{DoSearch} ) {
         my $ticket = $txn->Object;
         $ticket_worked{ $ticket->id } ||= { ticket => $ticket, };
         $ticket_worked{ $ticket->id }{time_worked} += $txn->TimeTaken;
-        $total_time_worked += $txn->TimeTaken;
     }
+
+    # See Perl Floating Point disclaimer
+    # https://metacpan.org/pod/Math::Round#VARIABLE
+    my $half = 0.50000000000008;
+    my $closest = 0.99999999999998;
+    if ($TimeWorkedDisplay == 2) {
+        # Round up
+        for my $ticket_id (keys %ticket_worked) {
+            $ticket_worked{$ticket_id}{time_worked} =
+                (int(($ticket_worked{$ticket_id}{time_worked} / 60) + $closest)*60);
+        }
+    } elsif ($TimeWorkedDisplay == 3) {
+        # Round to nearest hour
+        for my $ticket_id (keys %ticket_worked) {
+            $ticket_worked{$ticket_id}{time_worked} =
+                (int(($ticket_worked{$ticket_id}{time_worked} / 60) + $half)*60);
+        }
+    }
+    $total_time_worked = List::Util::sum( map { $ticket_worked{$_}{time_worked} } keys %ticket_worked );
 }
 </%INIT>
 
@@ -252,5 +295,6 @@ $Query => undef
 $StartDate => undef
 $EndDate => undef
 $IncludeChildren => 1
+$TimeWorkedDisplay => 1
 $TimeEstimated => 1
 </%ARGS>
