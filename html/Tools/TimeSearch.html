@@ -23,6 +23,15 @@
       <div class="col-3 label"><&|/l&>Include All Children?</&></div>
       <div class="col-9 value"><& /Widgets/Form/Boolean:InputOnly, Name => 'IncludeChildren', CurrentValue => $IncludeChildren &></div>
   </div>
+  <div class="form-row output-estimated">
+    <div class="col-3 label"><&|/l&>Display Estimated Time?</&></div>
+    <div class="col-9 value"><& /Widgets/Form/Boolean:InputOnly,
+                                    Name => 'TimeEstimated',
+                                    CurrentValue => $TimeEstimated,
+                                    DefaultLabel => '',
+                                &>
+    </div>
+  </div>
   <div class="form-row">
     <div class="col-12">
       <& /Elements/Submit, Name => 'DoSearch', Label => loc("Search") &>
@@ -46,7 +55,9 @@
         <th class="collection-as-table"><% $display_cf %></th>
 % }
         <th class="collection-as-table"><&|/l&>Time Worked</&></th>
+% if ( $TimeEstimated ){
         <th class="collection-as-table"><&|/l&>Time Estimated</&></th>
+% }
     </tr>
 % my $i = 1;
 % for my $ticket_id ( sort { $a <=> $b } keys %ticket_worked ) {
@@ -66,7 +77,9 @@
         <td class="collection-as-table"><% $ticket->FirstCustomFieldValue($display_cf) %></td>
 % }
         <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $entry->{time_worked} &></td>
+% if ( $TimeEstimated ){
         <td class="collection-as-table"><& /Ticket/Elements/ShowTime, minutes => $ticket->TimeEstimated &></td>
+% }
     </tr>
 % }
 </table>
@@ -239,4 +252,5 @@ $Query => undef
 $StartDate => undef
 $EndDate => undef
 $IncludeChildren => 1
+$TimeEstimated => 1
 </%ARGS>
