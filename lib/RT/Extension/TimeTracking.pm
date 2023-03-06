@@ -180,6 +180,41 @@ You can view other weeks on My Week by selecting any day in the desired week usi
 the date picker at the top of the page. You can also use the Previous and Next
 links to move from week to week.
 
+=head2 Time Search Tool
+
+This extension also adds the "Time Search" page under Tools. This page allows
+you to search for tickets and summarize the time worked on them.
+
+=head3 Ticket Query
+
+You can search using the same criteria as the normal ticket search, but you can
+also filter by tracked time date range.
+
+=head3 Time Worked Display
+
+You can choose between the following output formats for the time worked:
+
+    Exact time, hours and minutes: Display the exact time worked, including
+    minutes in decimal format. For example, 1 hour and 30 minutes would be
+    displayed as 1.5 hours.
+
+    Hours only, rounded up: Display the time worked rounded up to the nearest
+    hour. For example, 1 hour and 30 minutes would be displayed as 2 hours.
+
+    Hours only, rounded to nearest hour: Display the time worked rounded to
+    the nearest hour. For example, 1 hour and 30 minutes would be displayed
+    as 1 hour. 15 minutes would be displayed as 0 hours.
+
+=head3 Include All Children?
+
+If you select this option, the time worked on all child tickets will be
+included in the total time worked for the parent ticket.
+
+=head3 Display Estimated Time
+
+If you select this option, the Estimated Time field will be displayed for
+each ticket.
+
 =head2 Administrative View
 
 TimeTracking adds a right to allow some users to see the My Week page for other
