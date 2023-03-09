@@ -365,11 +365,15 @@ $activity_txns->Limit( FIELD => 'Created', OPERATOR => '<',  VALUE => $week_end-
 $activity_txns->Limit( FIELD => 'Type', VALUE => 'Create' );
 $activity_txns->Limit( FIELD => 'Type', VALUE => 'Correspond' );
 $activity_txns->Limit( FIELD => 'Type', VALUE => 'Comment' );
+$activity_txns->Limit( FIELD => 'Type', VALUE => 'Status' );
 my @ticket_ids;
 while ( my $txn = $activity_txns->Next ) {
     my $ticket = $txn->Object;
     my $worked_date = $txn->CreatedObj->ISO( Time => 0, Timezone => 'user' );
     next unless $week_worked{$worked_date};
+    # Currently we check active status with current ticket queue, not the one
+    # it was in when the transaction was created
+    next if $txn->Type eq 'Status' && $ticket->QueueObj->IsActiveStatus( $txn->NewValue );
     next if $week_worked{$worked_date}{tickets}{$ticket->id};
     $week_worked{$worked_date}{tickets}{$ticket->id} = {
         ticket => $ticket,
