@@ -6,6 +6,8 @@ div.time_tracking {
 div.day_entry {
     clear: both;
     position: relative;
+    overflow-y: hidden;
+    overflow-x: auto;
 }
 
 div.day_entry .update-time {
@@ -31,6 +33,10 @@ div.time_worked_week {
 
 div.add_new_time_entry {
     text-align: left;
+}
+
+div.add_new_time_entry form div.form-row {
+    width: 100%;
 }
 
 div.time_tracking h2 {
