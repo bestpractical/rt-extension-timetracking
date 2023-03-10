@@ -6,6 +6,7 @@ div.time_tracking {
 div.day_entry {
     clear: both;
     position: relative;
+    overflow-y: scroll;
 }
 
 div.day_entry .update-time {
