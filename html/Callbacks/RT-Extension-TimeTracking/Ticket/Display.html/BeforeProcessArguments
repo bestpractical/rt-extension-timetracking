@@ -1,7 +1,4 @@
 <%init>
-return unless $ARGSRef->{'id'};
-my $TicketObj = LoadTicket($ARGSRef->{'id'});
-
 if ( $ARGSRef->{'RunningTimeWorked'} ) {
     my $time = $ARGSRef->{'RunningTimeWorked'};
 
@@ -17,5 +14,6 @@ if ( $ARGSRef->{'UpdateTimeWorked'} and $ARGSRef->{'UpdateTimeWorked'} =~ /(\d+)
 }
 </%init>
 <%args>
+$TicketObj
 $ARGSRef
 </%args>
