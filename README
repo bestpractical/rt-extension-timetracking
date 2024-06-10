@@ -147,6 +147,15 @@ METHODS
     not yet because of DST, this method adjusts it accordingly. Note that
     the adjustment is inplace.
 
+  KNOWN ISSUES
+    My Week page automatically shows tickets where the user has tracked time
+    during the current week, as well as tickets that were created or where the
+    user has replied or commented during the current week. Additionally, it
+    shows tickets resolved by the user during the current week based on the
+    Lifecycle where the ticket currently resides. If the ticket is moved after
+    it was resolved to a queue with a different Lifecycle, it may not be shown
+    on the My Week page.
+
 AUTHOR
     Best Practical Solutions, LLC <modules@bestpractical.com>
 
